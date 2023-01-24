@@ -7,11 +7,13 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Observable } from 'rxjs';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { DepartmentInterface } from './department.interface';
 import { DepartmentService } from './department.service';
 
+@ApiTags('Departments')
 @Controller('department')
 export class DepartmentController {
   constructor(private departmentService: DepartmentService) {}

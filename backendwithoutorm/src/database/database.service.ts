@@ -25,7 +25,6 @@ class DatabaseService {
   ) {
     const queryPromise = source.query(query, params);
 
-    // message without unnecessary spaces and newlines
     const message = this.getLogMessage(query, params)
       .replace(/\n|/g, '')
       .replace(/  +/g, ' ');

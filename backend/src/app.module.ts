@@ -3,6 +3,7 @@ import { DepartmentModule } from './department/department.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EmployeeModule } from './employee/employee.module';
+import { ApiModule } from './api/api.module';
 
 @Module({
   imports: [ConfigModule.forRoot({isGlobal : true}),
@@ -16,8 +17,10 @@ import { EmployeeModule } from './employee/employee.module';
       autoLoadEntities:true,
       synchronize:true
     }),
+    ApiModule,
     DepartmentModule,
-    EmployeeModule],
+    EmployeeModule
+   ],
   controllers: [],
   providers: [],
 })

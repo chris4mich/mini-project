@@ -7,11 +7,13 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Observable } from 'rxjs';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { EmployeeInterface } from './employee.interface';
 import { EmployeeService } from './employee.service';
 
+@ApiTags('Employees')
 @Controller('employee')
 export class EmployeeController {
   constructor(private employeeService: EmployeeService) {}

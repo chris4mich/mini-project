@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Button,
   FormControl,
@@ -7,6 +7,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import axios from "axios";
 
 const Container = styled(FormGroup)`
   width: 30%;
@@ -16,28 +17,25 @@ const Container = styled(FormGroup)`
   }
 `;
 
-
 export default function AddDepartment() {
+  const [isRedirect, setIsRedirect] = useState(false);
+
+  useEffect(() => {
+    if (isRedirect) {
+      window.location.replace('/departments');
+    }
+  }, [isRedirect]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     var data = {
       department_name: name,
     };
-    fetch("http://localhost:4000/department/", {
-      method: "POST",
-      headers: {
-        Accept: "application/form-data",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        alert(result["message"]);
-        if (result["status"] === "ok") {
-          window.location.href = "/departments";
-        }
-      });
+    axios.post("http://localhost:4000/department/", data)
+      .then(res => {
+        setIsRedirect(true);
+      })
+      .catch(err => console.log(err));
   };
   const [name, setName] = useState("");
 

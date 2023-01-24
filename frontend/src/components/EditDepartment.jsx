@@ -1,8 +1,13 @@
 import {
-  Button, FormGroup, Grid, styled,
-  TextField, Typography
+  Button,
+  FormGroup,
+  FormControl,
+  styled,
+  TextField,
+  Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import axios from "axios";
 import { useParams } from "react-router-dom";
 
 const Container = styled(FormGroup)`
@@ -26,7 +31,7 @@ export default function EditDepartment() {
   const handleSubmit = (event) => {
     event.preventDefault();
     var data = {
-      name: name,
+      department_name: name,
     };
     fetch("http://localhost:4000/department/" + id, {
       method: "PATCH",
@@ -49,30 +54,34 @@ export default function EditDepartment() {
 
   return (
     <Container>
-      <Typography component="h2" variant="h4" color="primary" gutterBottom>Edit Department</Typography>
+      <Typography component="h2" variant="h4" color="primary" gutterBottom>
+        Edit Department
+      </Typography>
       <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              autoComplete="name"
-              name="departmentName"
-              variant="outlined"
-              required
-              fullWidth
-              id="departmentName"
-              label="Department Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              autoFocus
-            />
-          </Grid>
-        </Grid>
+        <FormControl>
+          <TextField
+            style={{ marginTop: 20, width: 600 }}
+            autoComplete="name"
+            name="departmentName"
+            variant="outlined"
+            required
+            fullWidth
+            id="departmentName"
+            label="Department Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            autoFocus
+          />
+        </FormControl>
         <Button
           type="submit"
           fullWidth
           variant="contained"
           color="primary"
-        >Update Department</Button>
+          style={{ marginTop: 30 }}
+        >
+          Update Department
+        </Button>
       </form>
     </Container>
   );

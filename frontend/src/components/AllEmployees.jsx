@@ -44,15 +44,15 @@ export default function EmployeesList() {
       });
   };
 
-  const UpdateEmployee = (id) => {
-    window.location = "/editdepartment/" + id;
+  const UpdateEmployee = (employee_id) => {
+    window.location = "/editemployee/" + employee_id;
   };
 
-  const EmployeeDelete = (id) => {
+  const EmployeeDelete = (employee_id) => {
     var data = {
-      id: id,
+      employee_id: employee_id,
     };
-    fetch("http://localhost:4000/employee/" + id, {
+    fetch("http://localhost:4000/employee/" + employee_id, {
       method: "DELETE",
       headers: {
         Accept: "application/form-data",
