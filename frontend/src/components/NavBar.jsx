@@ -23,13 +23,13 @@ const Title = styled(NavLink)`
 `
 
 
-const NavBar = () => {
+const NavBar = ({isAuthenticated}) => {
     return (
         <Header position='static'>
             <Toolbar>
-                <Title to='/'>MiniProject</Title>
-                <Tabs to='/departments'>Departments</Tabs>
-                <Tabs to='/employees'>Employees</Tabs>
+                <Title to={isAuthenticated ? '/employees' : '/'}>MiniProject</Title>
+                {isAuthenticated && <Tabs to='/departments'>Departments</Tabs>}
+                {isAuthenticated && <Tabs to='/employees'>Employees</Tabs>}
             </Toolbar>
         </Header>
     )

@@ -9,7 +9,7 @@ import {
 @Entity('departments')
 export class DepartmentEntity {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column({ unique: true })
   department_name: string;

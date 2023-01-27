@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -10,9 +9,11 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
+  Typography
 } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 // Styles
 const StyledTable = styled(Table)`
   width: 60%;
@@ -26,10 +27,6 @@ const Thead = styled(TableRow)`
   }
 `;
 
-const ButtonLink = styled(NavLink)`
-  text-decoration: none;
-`;
-
 export default function EmployeesList() {
   const [employees, setEmployees] = useState([]);
   useEffect(() => {
@@ -37,37 +34,25 @@ export default function EmployeesList() {
   }, []);
 
   const EmployeesGet = () => {
-    fetch("http://localhost:4000/employee/")
-      .then((res) => res.json())
+    axios.get("http://localhost:4000/employee/")
       .then((result) => {
-        setEmployees(result);
-      });
+        setEmployees(result.data);
+      }
+      )
   };
 
-  const UpdateEmployee = (employee_id) => {
-    window.location = "/editemployee/" + employee_id;
-  };
-
-  const EmployeeDelete = (employee_id) => {
-    var data = {
-      employee_id: employee_id,
-    };
-    fetch("http://localhost:4000/employee/" + employee_id, {
-      method: "DELETE",
-      headers: {
-        Accept: "application/form-data",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        alert(result["Delete done"]);
-        if (result["status"] === "ok") {
+  const handleEmployeeDelete = (id) => {
+    axios
+      .delete(`http://localhost:4000/employee/${id}`)
+      .then((res) => {
+        if (res.status === 200) {
+          alert("Employee Deleted Successfully!");
           EmployeesGet();
         }
-      });
+      })
+      .catch((err) => console.log(err));
   };
+  
 
   return (
     <div>
@@ -97,8 +82,8 @@ export default function EmployeesList() {
                 <TableCell align="center">Actions</TableCell>
               </Thead>
               {employees.map((employee) => (
-                <TableRow key={employee.ID}>
-                  <TableCell align="center">{employee.employee_id}</TableCell>
+                <TableRow key={employee.id}>
+                  <TableCell align="center">{employee.id}</TableCell>
                   <TableCell align="center">{employee.firstname}</TableCell>
                   <TableCell align="center">{employee.lastname}</TableCell>
                   <TableCell align="center">{employee.afm}</TableCell>
@@ -110,16 +95,17 @@ export default function EmployeesList() {
                       aria-label="outlined primary button group"
                     >
                       <Button
+                        component={Link}
+                        to={"/employees/" + employee.id}
                         variant="contained"
                         style={{ marginRight: 10 }}
-                        onClick={() => UpdateEmployee(employee.employee_id)}
                       >
                         Edit
                       </Button>
                       <Button
                         variant="contained"
                         style={{ marginRight: 10 }}
-                        onClick={() => EmployeeDelete(employee.employee_id)}
+                        onClick={() => handleEmployeeDelete(employee.id)}
                       >
                         Del
                       </Button>
@@ -130,13 +116,13 @@ export default function EmployeesList() {
             </TableHead>
           </Table>
         </TableContainer>
-
-        <ButtonLink to="/addemployee">
-          <Button variant="contained" style={{ marginTop: 20, padding: 15 }}>
+          <Button 
+          component={Link} to="/employees/add"
+          variant="contained" style={{ marginTop: 20, padding: 15 }}>
             Add Employee
           </Button>
-        </ButtonLink>
       </StyledTable>
     </div>
   );
 }
+

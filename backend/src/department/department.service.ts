@@ -19,6 +19,10 @@ export class DepartmentService {
     return await this.departmentRepository.save(departmentInterface);
   }
 
+  async findDepartmentById(id: number): Promise<DepartmentInterface> {
+    return await this.departmentRepository.findOne({ where: {id}});
+}
+
   async findAllDepartments(): Promise<DepartmentInterface[]> {
     return await this.departmentRepository.find();
   }

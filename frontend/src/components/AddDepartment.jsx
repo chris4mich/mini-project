@@ -1,13 +1,11 @@
-import { useState, useEffect } from "react";
 import {
-  Button,
-  FormControl,
   FormGroup,
-  styled,
-  TextField,
-  Typography,
+  styled, Typography
 } from "@mui/material";
 import axios from "axios";
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
+import DepartmentForm from "./DepartmentForm";
 
 const Container = styled(FormGroup)`
   width: 30%;
@@ -20,55 +18,25 @@ const Container = styled(FormGroup)`
 export default function AddDepartment() {
   const [isRedirect, setIsRedirect] = useState(false);
 
-  useEffect(() => {
-    if (isRedirect) {
-      window.location.replace('/departments');
-    }
-  }, [isRedirect]);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    var data = {
-      department_name: name,
-    };
-    axios.post("http://localhost:4000/department/", data)
-      .then(res => {
+  const handleSubmit = (department) => {
+    axios
+      .post("http://localhost:4000/department/", department)
+      .then((res) => {
         setIsRedirect(true);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   };
-  const [name, setName] = useState("");
 
-  return (
-    <Container>
-      <Typography component="h2" variant="h4" color="primary" gutterBottom>
-        Add Departments
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <FormControl>
-          <TextField
-            style={{ marginTop: 20, width: 600 }}
-            autoComplete="name"
-            name="departmentName"
-            variant="outlined"
-            required
-            fullWidth
-            id="departmentName"
-            label="Department Name"
-            onChange={(e) => setName(e.target.value)}
-            autoFocus
-          />
-        </FormControl>
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="primary"
-          style={{ marginTop: 30 }}
-        >
-          Create
-        </Button>
-      </form>
-    </Container>
-  );
+  if (isRedirect) {
+    return <Navigate to="/departments"></Navigate>;
+  } else {
+    return (
+      <Container>
+        <Typography component="h2" variant="h4" color="primary" gutterBottom>
+          Create Department
+        </Typography>
+        <DepartmentForm onSubmit={handleSubmit} />
+      </Container>
+    );
+  }
 }

@@ -1,5 +1,5 @@
 export interface DepartmentInterface{
-    id? : string
+    id? : number
     department_name : string
     createdAt: Date
 }

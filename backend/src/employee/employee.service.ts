@@ -19,6 +19,10 @@ export class EmployeeService {
     return await this.employeeRepository.save(employeeInterface);
   }
 
+  async findEmployeeById(id: number): Promise<EmployeeInterface> {
+    return await this.employeeRepository.findOne({ where: {id}});
+}
+
   async findAllEmployees(): Promise<EmployeeInterface[]> {
     return await this.employeeRepository.find();
   }

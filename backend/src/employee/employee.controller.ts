@@ -25,6 +25,11 @@ export class EmployeeController {
     return await this.employeeService.createEmployee(blogPost);
   }
 
+  @Get(':id')
+  async findEmployeeById(@Param('id') id: number): Promise<EmployeeInterface> {
+      return await this.employeeService.findEmployeeById(id);
+  }
+
   @Get()
   async findAllEmployees(): Promise<EmployeeInterface[]> {
     return await this.employeeService.findAllEmployees();

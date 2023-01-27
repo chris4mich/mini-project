@@ -25,6 +25,11 @@ export class DepartmentController {
     return await this.departmentService.createDepartment(blogPost);
   }
 
+  @Get(':id')
+  async findDepartmentById(@Param('id') id: number): Promise<DepartmentInterface> {
+      return await this.departmentService.findDepartmentById(id);
+  }
+
   @Get()
   async findAllDepartments(): Promise<DepartmentInterface[]> {
     return await this.departmentService.findAllDepartments();

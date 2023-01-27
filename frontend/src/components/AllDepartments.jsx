@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -12,7 +11,9 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 // Styles
 const StyledTable = styled(Table)`
   width: 60%;
@@ -32,52 +33,34 @@ const Tbody = styled(TableRow)`
   }
 `;
 
-const ButtonLink = styled(NavLink)`
-  text-decoration: none;
-`;
-
-export default function UserList() {
+export default function AllDepartments() {
   const [departments, setDepartments] = useState([]);
+
   useEffect(() => {
-    DepartmentsGet();
+    departmentsGet();
   }, []);
 
-  const DepartmentsGet = () => {
-    fetch("http://localhost:4000/department/")
-      .then((res) => res.json())
-      .then((result) => {
-        setDepartments(result);
-      });
+  const departmentsGet = () => {
+    axios.get("http://localhost:4000/department/").then((result) => {
+      setDepartments(result.data);
+    });
   };
 
-  const UpdateDepartment = (id) => {
-    window.location = "/editdepartment/" + id;
-  };
-
-  const DepartmentDelete = (id) => {
-    var data = {
-      id: id,
-    };
-    fetch("http://localhost:4000/department/" + id, {
-      method: "DELETE",
-      headers: {
-        Accept: "application/form-data",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        alert(result["Done delete"]);
-        if (result["status"] === "ok") {
-          DepartmentsGet();
+  const handleDepartmentDelete = (id) => {
+    axios
+      .delete(`http://localhost:4000/department/${id}`)
+      .then((res) => {
+        if (res.status === 200) {
+          alert("Department Deleted Successfully!");
+          departmentsGet();
         }
-      });
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
     <div>
-      <StyledTable maxWidth="lg">
+      <StyledTable>
         <Box display="flex">
           <Box flexGrow={1}>
             <Typography
@@ -99,7 +82,7 @@ export default function UserList() {
                 <TableCell align="center">Actions</TableCell>
               </Thead>
               {departments.map((department) => (
-                <Tbody key={department.ID}>
+                <Tbody key={department.id}>
                   <TableCell align="center">{department.id}</TableCell>
                   <TableCell align="center">
                     {department.department_name}
@@ -110,16 +93,17 @@ export default function UserList() {
                       aria-label="outlined primary button group"
                     >
                       <Button
+                        component={Link}
+                        to={"/departments/" + department.id}
                         variant="contained"
                         style={{ marginRight: 10 }}
-                        onClick={() => UpdateDepartment(department.id)}
                       >
                         Edit
                       </Button>
                       <Button
                         variant="contained"
                         style={{ marginRight: 10 }}
-                        onClick={() => DepartmentDelete(department.id)}
+                        onClick={() => handleDepartmentDelete(department.id)}
                       >
                         Delete
                       </Button>
@@ -130,15 +114,14 @@ export default function UserList() {
             </TableHead>
           </Table>
         </TableContainer>
-
-        <ButtonLink to="/adddepartment">
-          <Button
-            variant="contained"
-            style={{ marginTop: 20, marginBottom: 40, padding: 15 }}
-          >
-            Add Department
-          </Button>
-        </ButtonLink>
+        <Button
+          component={Link}
+          to="/departments/add"
+          variant="contained"
+          style={{ marginTop: 20, marginBottom: 40, padding: 15 }}
+        >
+          Add Department
+        </Button>
       </StyledTable>
     </div>
   );
