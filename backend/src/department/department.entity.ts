@@ -1,8 +1,10 @@
+import { EmployeeEntity } from 'src/employee/Employee.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -13,6 +15,9 @@ export class DepartmentEntity {
 
   @Column({ unique: true })
   department_name: string;
+
+  @OneToMany(type => EmployeeEntity, employee => employee.department)
+  employees: EmployeeEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

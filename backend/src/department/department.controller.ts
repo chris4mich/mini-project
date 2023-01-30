@@ -20,19 +20,26 @@ export class DepartmentController {
 
   @Post()
   async createDepartment(
-    @Body() blogPost: DepartmentInterface,
+    @Body() departmentInterface: DepartmentInterface,
   ): Promise<DepartmentInterface> {
-    return await this.departmentService.createDepartment(blogPost);
+    return await this.departmentService.createDepartment(departmentInterface);
   }
 
   @Get(':id')
-  async findDepartmentById(@Param('id') id: number): Promise<DepartmentInterface> {
-      return await this.departmentService.findDepartmentById(id);
+  async findDepartmentById(
+    @Param('id') id: number,
+  ): Promise<DepartmentInterface> {
+    return await this.departmentService.findDepartmentById(id);
   }
 
   @Get()
   async findAllDepartments(): Promise<DepartmentInterface[]> {
     return await this.departmentService.findAllDepartments();
+  }
+
+  @Get(':id/employees')
+  async getEmployees(@Param('id') id: number) {
+    return this.departmentService.getEmployeesByDepartment(id);
   }
 
   @Delete(':id')
@@ -43,8 +50,8 @@ export class DepartmentController {
   @Patch(':id')
   updateDepartment(
     @Param('id') id: number,
-    @Body() blogPost: DepartmentInterface,
+    @Body() departmentInterface: DepartmentInterface,
   ): Promise<UpdateResult> {
-    return this.departmentService.updateDepartment(id, blogPost);
+    return this.departmentService.updateDepartment(id, departmentInterface);
   }
 }

@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import {
+  DeleteResult,
+  FindManyOptions,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 
 import { EmployeeEntity } from 'src/employee/Employee.entity';
 import { from, Observable } from 'rxjs';
@@ -18,13 +23,15 @@ export class EmployeeService {
   ): Promise<EmployeeInterface> {
     return await this.employeeRepository.save(employeeInterface);
   }
-
+  
   async findEmployeeById(id: number): Promise<EmployeeInterface> {
-    return await this.employeeRepository.findOne({ where: {id}});
-}
+    return await this.employeeRepository.findOne({ where: { id } });
+  }
 
-  async findAllEmployees(): Promise<EmployeeInterface[]> {
-    return await this.employeeRepository.find();
+  async findAllEmployees(
+    options?: FindManyOptions<EmployeeEntity>,
+  ): Promise<EmployeeEntity[]> {
+    return this.employeeRepository.find(options);
   }
 
   async deleteEmployee(id: number) {

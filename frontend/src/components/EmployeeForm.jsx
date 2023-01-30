@@ -1,9 +1,13 @@
 import {
   Button,
-  FormControl, TextField
+  FormControl,
+  TextField,
+  Select,
+  MenuItem,
+  InputLabel,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-
+import axios from "axios";
 
 const EmployeeForm = ({ employee, onSubmit }) => {
   const [curEmployee, setEmployee] = useState(
@@ -12,13 +16,25 @@ const EmployeeForm = ({ employee, onSubmit }) => {
       lastname: "",
       afm: null,
       dateofbirth: "",
+      department: {
+        department_name: "",
+      },
     }
   );
+
+  const [departments, setDepartments] = useState([]);
+
+  const departmentsGet = () => {
+    axios.get("http://localhost:4000/department/").then((result) => {
+      setDepartments(result.data);
+    });
+  };
 
   useEffect(() => {
     if (employee) {
       setEmployee(employee);
     }
+    departmentsGet();
   }, [employee]);
 
   const onUpdateField = (e) => {
@@ -90,6 +106,22 @@ const EmployeeForm = ({ employee, onSubmit }) => {
             onChange={onUpdateField}
             name="dateofbirth"
           />
+          <InputLabel id="simple-select-helper-label">Department name</InputLabel>
+          <Select
+            style={{ marginTop: 20, width: 600 }}
+            labelId="department name"
+            id="department_name"
+            placeholder={"departments"}
+            label="Department name"
+            onChange={onUpdateField}
+            name="department_name"
+          >
+            {departments.map((department, idx) => (
+              <MenuItem key={idx} value={department.id}>
+                {department ? department.department_name : ""}
+              </MenuItem>
+            ))}
+          </Select>
           <Button
             type="submit"
             fullWidth

@@ -9,7 +9,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography
+  Typography,
 } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -34,11 +34,9 @@ export default function EmployeesList() {
   }, []);
 
   const EmployeesGet = () => {
-    axios.get("http://localhost:4000/employee/")
-      .then((result) => {
-        setEmployees(result.data);
-      }
-      )
+    axios.get("http://localhost:4000/employee/").then((result) => {
+      setEmployees(result.data);
+    });
   };
 
   const handleEmployeeDelete = (id) => {
@@ -52,7 +50,6 @@ export default function EmployeesList() {
       })
       .catch((err) => console.log(err));
   };
-  
 
   return (
     <div>
@@ -73,6 +70,7 @@ export default function EmployeesList() {
           <Table aria-label="simple table">
             <TableHead>
               <Thead>
+                {/* <p>Id: {employees.department}</p> */}
                 <TableCell align="center">ID</TableCell>
                 <TableCell align="center">First Name</TableCell>
                 <TableCell align="center">Last Name</TableCell>
@@ -88,7 +86,11 @@ export default function EmployeesList() {
                   <TableCell align="center">{employee.lastname}</TableCell>
                   <TableCell align="center">{employee.afm}</TableCell>
                   <TableCell align="center">{employee.dateofbirth}</TableCell>
-                  <TableCell align="center">{employee.department_id}</TableCell>
+                  <TableCell align="center">
+                    {employee.department
+                      ? employee.department.department_name
+                      : ""}
+                  </TableCell>
                   <TableCell align="center">
                     <ButtonGroup
                       color="primary"
@@ -116,13 +118,15 @@ export default function EmployeesList() {
             </TableHead>
           </Table>
         </TableContainer>
-          <Button 
-          component={Link} to="/employees/add"
-          variant="contained" style={{ marginTop: 20, padding: 15 }}>
-            Add Employee
-          </Button>
+        <Button
+          component={Link}
+          to="/employees/add"
+          variant="contained"
+          style={{ marginTop: 20, padding: 15 }}
+        >
+          Add Employee
+        </Button>
       </StyledTable>
     </div>
   );
 }
-

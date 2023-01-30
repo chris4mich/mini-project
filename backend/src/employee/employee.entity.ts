@@ -1,7 +1,9 @@
+import { DepartmentEntity } from 'src/department/Department.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -21,6 +23,9 @@ export class EmployeeEntity {
 
   @Column()
   dateofbirth: string;
+
+  @ManyToOne(type => DepartmentEntity, department => department.employees)
+  department: DepartmentEntity;
 
   @CreateDateColumn()
   createdAt: Date;

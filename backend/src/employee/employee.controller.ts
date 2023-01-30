@@ -20,9 +20,9 @@ export class EmployeeController {
 
   @Post()
   async createEmployee(
-    @Body() blogPost: EmployeeInterface,
+    @Body() employeeInterface: EmployeeInterface,
   ): Promise<EmployeeInterface> {
-    return await this.employeeService.createEmployee(blogPost);
+    return await this.employeeService.createEmployee(employeeInterface);
   }
 
   @Get(':id')
@@ -32,7 +32,14 @@ export class EmployeeController {
 
   @Get()
   async findAllEmployees(): Promise<EmployeeInterface[]> {
-    return await this.employeeService.findAllEmployees();
+    return await this.employeeService.findAllEmployees({
+      join: {
+        alias: "employee",
+        leftJoinAndSelect: {
+          department: "employee.department",
+        }
+      }
+    });
   }
 
   @Delete(':id')
@@ -43,8 +50,8 @@ export class EmployeeController {
   @Patch(':id')
   updateEmployee(
     @Param('id') id: number,
-    @Body() blogPost: EmployeeInterface,
+    @Body() employeeInterface: EmployeeInterface,
   ): Promise<UpdateResult> {
-    return this.employeeService.updateEmployee(id, blogPost);
+    return this.employeeService.updateEmployee(id, employeeInterface);
   }
 }
