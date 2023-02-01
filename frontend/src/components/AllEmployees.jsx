@@ -10,6 +10,8 @@ import {
   TableHead,
   TableRow,
   Typography,
+  TextField,
+  Grid
 } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -29,6 +31,7 @@ const Thead = styled(TableRow)`
 
 export default function EmployeesList() {
   const [employees, setEmployees] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   useEffect(() => {
     EmployeesGet();
   }, []);
@@ -51,11 +54,30 @@ export default function EmployeesList() {
       .catch((err) => console.log(err));
   };
 
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filteredEmployees = employees.filter((employee) => {
+    return (
+      employee.firstname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      employee.lastname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      employee.afm.toString().includes(searchQuery) ||
+      (employee.department
+        ? employee.department.department_name
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
+        : "")
+    );
+  });
+
   return (
     <div>
       <StyledTable maxWidth="lg">
         <Box display="flex">
-          <Box flexGrow={1}>
+          <Box flexGrow={1} style={{ marginTop: 10 }}>
+          <Grid container spacing={1} justifyContent="space-around">
+          <Grid xs={9}>
             <Typography
               component="h2"
               variant="h4"
@@ -64,6 +86,18 @@ export default function EmployeesList() {
             >
               Employees
             </Typography>
+            </Grid>
+            <Grid>
+            <Box align="right">
+              <TextField
+                label="Search"
+                value={searchQuery}
+                onChange={handleSearch}
+                style={{ marginBottom: 10 }}
+              />
+            </Box>
+            </Grid>
+            </Grid>
           </Box>
         </Box>
         <TableContainer component={Paper}>
@@ -79,7 +113,7 @@ export default function EmployeesList() {
                 <TableCell align="center">Department</TableCell>
                 <TableCell align="center">Actions</TableCell>
               </Thead>
-              {employees.map((employee) => (
+              {filteredEmployees.map((employee) => (
                 <TableRow key={employee.id}>
                   <TableCell align="center">{employee.id}</TableCell>
                   <TableCell align="center">{employee.firstname}</TableCell>
