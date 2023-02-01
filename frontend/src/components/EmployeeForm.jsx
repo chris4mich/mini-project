@@ -1,13 +1,9 @@
 import {
   Button,
-  FormControl,
-  TextField,
-  Select,
-  MenuItem,
-  InputLabel,
+  FormControl, MenuItem, Select, TextField
 } from "@mui/material";
-import { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 const EmployeeForm = ({ employee, onSubmit }) => {
   const [curEmployee, setEmployee] = useState(
@@ -16,9 +12,7 @@ const EmployeeForm = ({ employee, onSubmit }) => {
       lastname: "",
       afm: null,
       dateofbirth: "",
-      department: {
-        department_name: "",
-      },
+      department: {},
     }
   );
 
@@ -84,6 +78,8 @@ const EmployeeForm = ({ employee, onSubmit }) => {
             style={{ marginTop: 20, width: 600 }}
             autoComplete="afm"
             name="afm"
+            type="number"
+            maxlength="9"
             variant="outlined"
             required
             fullWidth
@@ -106,7 +102,6 @@ const EmployeeForm = ({ employee, onSubmit }) => {
             onChange={onUpdateField}
             name="dateofbirth"
           />
-          <InputLabel id="simple-select-helper-label">Department name</InputLabel>
           <Select
             style={{ marginTop: 20, width: 600 }}
             labelId="department name"
@@ -114,7 +109,7 @@ const EmployeeForm = ({ employee, onSubmit }) => {
             placeholder={"departments"}
             label="Department name"
             onChange={onUpdateField}
-            name="department_name"
+            name="department"
           >
             {departments.map((department, idx) => (
               <MenuItem key={idx} value={department.id}>

@@ -13,7 +13,7 @@ const Container = styled(FormGroup)`
   }
 `;
 
-const AddEmployee = () => {
+const EditEmployee = () => {
   const [isRedirect, setIsRedirect] = useState(false);
   const { id } = useParams();
   const [employee, setEmployee] = useState(null);
@@ -53,4 +53,4 @@ const AddEmployee = () => {
     );
   }
 };
-export default AddEmployee;
+export default EditEmployee;
